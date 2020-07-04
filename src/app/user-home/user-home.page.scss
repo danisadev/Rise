@@ -1,0 +1,35 @@
+.playback {
+  position: absolute;
+  bottom: 0;
+}
+
+.toolbar {
+  margin: auto;
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
+
+ion-range {
+  margin: auto;
+}
+
+ion-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+ .logo {
+     width: 50%;
+ }
+
+ .toolbarAlbumArt {
+     width: 10%;
+     height: auto;
+ }
+
+ .albumArtItem {
+     padding: 0;
+ }

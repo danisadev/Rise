@@ -1,0 +1,29 @@
+<ion-split-pane contentId="main">
+  <!--  the side menu  -->
+  <ion-menu contentId="main">
+    <img src="../../assets/img/Rise.jpg">
+    <!-- <img src="../../assets/img/girl.jpg" style="z-index:2"> -->
+  </ion-menu>
+
+  <!-- the main content -->
+  <ion-content>
+    
+      <form [formGroup]="registerForm" (ngSubmit)="onLogin()">
+        <ion-item>
+          <ion-label position="floating">Username</ion-label>
+          <ion-input type="text" class="form-control" formControlName="email"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating" class="form-control">Password</ion-label>
+          <ion-input type="password" class="form-control" formControlName="password"></ion-input>
+        </ion-item>
+
+
+        <ion-button (click)="onLogin()">Login</ion-button>
+        <ion-button (click)="onRegister()">Register</ion-button>
+      </form>
+    
+  </ion-content>
+
+
+</ion-split-pane>

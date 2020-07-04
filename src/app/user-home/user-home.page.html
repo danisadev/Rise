@@ -1,0 +1,68 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-item lines="none">
+      <ion-title>RISE</ion-title>
+      <ion-avatar (click)="presentPopover()">
+        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+      </ion-avatar>
+
+    </ion-item>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+      <ion-row>
+          <ion-col *ngFor="let track of playlist" col-4>
+    <!-- <ion-item  lines="none" (click)="start(track)"> -->
+      
+          <ion-card (click)="start(track)">
+            <img src={{track.album_art}}>
+            <ion-card-header>
+              <ion-card-subtitle>{{track.artist}}</ion-card-subtitle>
+              <ion-card-title>{{track.title}}</ion-card-title>
+            </ion-card-header>
+          </ion-card>
+       
+    <!-- </ion-item> -->
+  </ion-col>
+</ion-row>
+  
+</ion-content>
+
+<ion-footer class="playback" *ngIf="activeTrack">
+  <ion-toolbar>
+    <ion-row>
+      <ion-col>
+        <ion-item href="/now-playing" lines="none" class="albumArtItem">
+          <img src={{activeTrack.album_art}} class="toolbarAlbumArt">
+        </ion-item>
+      </ion-col>
+      <!-- <ion-col size="12"> -->
+      <ion-label class="toolbar">{{ activeTrack.title }}</ion-label>
+      <!-- </ion-col> -->
+
+      <ion-col>
+        <ion-range #range [(ngModel)]="progress" max="100" color="success" (touchend)="seek()" (mouseup)="seek()">
+        </ion-range>
+      </ion-col>
+      <ion-col>
+        <ion-item lines="none" class="playback_buttons">
+          <ion-button fill="clear" (click)="prev()" color="dark" slot="end">
+            <ion-icon name="play-back" slot="end"></ion-icon>
+          </ion-button>
+          <ion-button fill="clear" (click)="togglePlayer(false)" *ngIf="!isPlaying" color="dark" slot="end">
+            <ion-icon name="play" slot="end"></ion-icon>
+          </ion-button>
+          <ion-button fill="clear" (click)="togglePlayer(true)" *ngIf="isPlaying" color="dark" slot="end">
+            <ion-icon name="pause" slot="end"></ion-icon>
+          </ion-button>
+          <ion-button fill="clear" (click)="next()" color="dark" slot="end">
+            <ion-icon name="play-forward" slot="end"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+  </ion-toolbar>
+</ion-footer>

@@ -1,8 +1,19 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+    <ion-item lines="none">
+      <ion-title>
+        Rise Discover new music
+      </ion-title>
+      <ion-item slot="end" lines="none" href="/login">
+        <ion-grid>
+          <ion-row>
+            <ion-label>
+              Login
+            </ion-label>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-item>
   </ion-toolbar>
 </ion-header>
 
@@ -14,7 +25,34 @@
   </ion-header>
 
   <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+    <strong>What do these people have in common?</strong>
+    <ion-grid>
+      <ion-col>
+        <ion-row class="ion-align-items-center">
+          <ion-avatar>
+            <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+          </ion-avatar>
+          <ion-avatar>
+            <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+          </ion-avatar>
+          <ion-avatar>
+            <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+          </ion-avatar>
+          <ion-avatar>
+            <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+          </ion-avatar>
+        </ion-row>
+      </ion-col>
+    </ion-grid>
+    <!-- <p>Start with Ionic <a target="_blank" rel="noopener noreferrer"
+        href="https://ionicframework.com/docs/components">UI Components</a></p> -->
+        <div>
+          <span>
+            They all share their music through Rise.
+          </span>
+          <span>
+            The new platform for upcoming artists!
+          </span>
+        </div>
   </div>
 </ion-content>
