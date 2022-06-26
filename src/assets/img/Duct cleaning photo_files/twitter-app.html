@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html><head lang="en"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title></title>
+    
+    <script id="twitter-wjs" src="./widgets.js"></script><script src="./jquery.min(1).js"></script>
+    <script src="./apps-api.js"></script>
+    <script type="text/javascript">
+        window.twttr = (function (d, s, id) {
+            var t, js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "https://platform.twitter.com/widgets.js";
+            fjs.parentNode.insertBefore(js, fjs);
+            return window.twttr || (t = {
+                        _e: [], ready: function (f) {
+                            t._e.push(f)
+                        }
+                    });
+        }(document, "script", "twitter-wjs"));
+
+        window.twttr.ready(function (twttr) {
+            window.twttr.events.bind(
+                    'rendered',
+                    function (event) {
+                        twitterError = $("body > a.twitter-timeline-error");
+                        if (twitterError.length > 0){
+                            AppsApi.setSettings('hasTimeline', false);
+                        } else {
+                            AppsApi.setSettings('hasTimeline', true);
+                        }
+                    }
+            );
+        });
+    </script>
+    <script type="text/javascript">
+        (function () {
+            var url = AppsApi.getCurrentUrl();
+            var widgetTypeMap = {
+                twitterFollow: {
+                    "class": "twitter-follow-button",
+                    params: [{param: "followUser", attr: "href"}, {
+                        param: "showCount",
+                        attr: "data-show-count"
+                    }, {param: "showScreenName", attr: "data-show-screen-name"}]
+                },
+                twitterTweet: {
+                    "class": "twitter-share-button",
+                    params: [{param: "tweetUrl", attr: "data-url"}, {
+                        param: "tweetVia",
+                        attr: "data-via"
+                    }, {param: "customTweetText", attr: "data-text"}, {param: "countLayout", attr: "data-count"}]
+                },
+                twitterFeed: {
+                    "class": "twitter-timeline",
+                    params: [{param: "user", attr: "href"}, {
+                        param: "theme",
+                        attr: "data-theme"
+                    }, {
+                        param: "height",
+                        attr: "height"
+                    }, {param: "screenName", attr: "data-screen-name"}, {param: "tweetLimit", attr: "data-tweet-limit"}]
+                }
+            };
+
+            function parseQueryParams() {
+                var query = window.location.search.substring(1) || '';
+                var queries = query.split('&');
+                var params = {};
+                for (var i = 0; i < queries.length; i++) {
+                    var p = queries[i].split('=');
+                    if (p.length != 2) continue;
+                    params[decodeURIComponent(p[0])] = decodeURIComponent(p[1].replace(/\+/g, " "));
+                }
+                return params;
+            }
+
+            function valueOrDefault(value, defaultValue) {
+                if (value === null || value === undefined) {
+                    return defaultValue;
+                }
+                return value;
+            }
+
+            var params = parseQueryParams();
+            var viewMode = AppsApi.getViewMode();
+            var widgetType = valueOrDefault(params ["widgetType"], undefined);
+            var widgetData = widgetTypeMap[widgetType];
+            var attributes = widgetData.params;
+            var html = '<a';
+            switch (widgetType) {
+                case 'twitterFeed':
+                    params["screenName"] = params["user"];
+                    params["user"] = "https://www.twitter.com/" + params["user"];
+                    if (params["limitTweets"] === "false") {
+                        params['tweetLimit'] = "";
+                        if (!params["height"]){
+                            params["height"] = "400";
+                        }
+                    }
+                    break;
+                case 'twitterTweet':
+                    if (params['useCustomUrl'] === "false") {
+                        params["tweetUrl"] = url;
+                    }
+                    else if (params["tweetUrl"] && params["tweetUrl"].indexOf('//') === -1) {
+                        params["tweetUrl"] = "//" + params["tweetUrl"]
+                    }
+
+                    var layout = params['countLayout'];
+                    if(viewMode === 'designer'){
+                        switch(layout){
+                            case 'horizontal':
+                                AppsApi.setAppSize({height: 20, width: 107});
+                                break;
+                            case 'vertical':
+                                AppsApi.setAppSize({height: 62, width: 58});
+                                break;
+                            case 'none':
+                                AppsApi.setAppSize({height: 20, width: 58});
+                                break;
+                        }
+                    }
+                    break;
+
+                case 'twitterFollow':
+                    if (params["followUser"] === "" || params["followUser"].length > 20) {
+                        params["followUser"] = params["defaultUser"]
+                    }
+                    params["followUser"] = "https://www.twitter.com/"+params["followUser"];
+                    var sizeObject = {height: 20, width: 60};
+                    if(params['showScreenName'] === 'true'){
+                        sizeObject.width += 134;
+                    }
+                    if(params['showCount'] === 'true'){
+                        sizeObject.width += 98;
+                    }
+                    if(viewMode === 'designer'){
+                        AppsApi.setAppSize(sizeObject);
+                    }
+                    break;
+            }
+
+            html = html + ' class="' + widgetData["class"] + '"';
+            for (var i = 0; i < attributes.length; i++) {
+                if (params[attributes[i].param] !== "") {
+                    html = html + ' ' + attributes[i].attr + '="' + params[attributes[i].param] + '"';
+                }
+            }
+            html = html + '></a>';
+
+            document.write(html);
+            if (widgetType === 'twitterFeed') {
+                setInterval(function () {
+                    var widgetHeight = $(document.body).height();
+                    if (widgetHeight > 0) {
+                        AppsApi.setDocumentSize({height: widgetHeight});
+                    }
+                }, 100);
+            }
+
+        }) ();
+    </script><script charset="utf-8" src="./button.683df8cb64b87a8e4759b1fa17147ad1.js"></script></head><body marginwidth="0" marginheight="0"><iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" class="twitter-follow-button twitter-follow-button-rendered" style="position: static; visibility: visible; width: 65px; height: 20px;" title="Twitter Follow Button" src="./follow_button.3c5aa8e2a38bbbee4b6d88e6846fc657.en.html" data-screen-name="Fair_Deal_Home"></iframe>
+    <style>
+        .twitter-timeline
+        {
+            display: block !important;
+            width: 100% !important;
+        }
+    </style>
+
+
+
+
+<div class="widgetContainer">
+
+</div>
+
+
+<iframe scrolling="no" frameborder="0" allowtransparency="true" src="./widget_iframe.3c5aa8e2a38bbbee4b6d88e6846fc657.html" title="Twitter settings iframe" style="display: none;"></iframe></body></html>

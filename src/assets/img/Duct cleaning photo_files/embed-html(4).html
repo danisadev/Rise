@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title></title>
+    
+    <script src="./apps-api.js"></script>
+    <script type="text/javascript">
+        var _wzSessionId = AppsApi.getQueryParamValue("wzId") + AppsApi.getQueryParamValue("wzSessionId");
+        var isLoaded = sessionStorage.getItem(_wzSessionId + "html") != null;
+        if (isLoaded) {
+            AppsApi.addEventListener(AppsApi.Events.SETTING_CHANGE, function(data) {
+                var reload = false;
+                for (var i in data) {
+                    var prop = data[i];
+                    if (prop.name === "html") {
+                        sessionStorage.setItem(_wzSessionId + "html", prop.value);
+                        reload = true;
+                    } else if (prop.name === "headerHtml") {
+                        sessionStorage.setItem(_wzSessionId + "headerHtml", prop.value);
+                        reload = true;
+                    }
+                }
+                if (reload) {
+                    window.location.reload();
+                }
+            });
+            AppsApi.addEventListener(AppsApi.Events.SIZE_CHANGE, function(data) { document.body.style.width = data.width + "px"; document.body.style.height = data.height + "px"; });
+            var headerHtml = sessionStorage.getItem(_wzSessionId + "headerHtml");
+            if (headerHtml) {
+                document.write(headerHtml);
+            }
+        } else {
+            AppsApi.getSettings(["html", "headerHtml"], function(data) {
+                sessionStorage.setItem(_wzSessionId + "html", data.html);
+                sessionStorage.setItem(_wzSessionId + "headerHtml", data.headerHtml);
+                window.location.reload();
+            });
+        }
+    </script>
+</head>
+<body marginwidth="0" marginheight="0">
+<script type="text/javascript">
+    var html = sessionStorage.getItem(_wzSessionId + "html");
+    if (html != null) {
+        var size = AppsApi.getQueryParamValue("wzSize");
+        document.body.style.width = size.width + "px"; document.body.style.height = size.height + "px";
+        document.write(html);
+    }
+</script>
+
+</body></html>

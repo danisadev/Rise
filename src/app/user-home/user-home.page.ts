@@ -1,11 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Howl, Howler } from 'howler'
+import { Howl, Howler } from 'howler';
 // import { timingSafeEqual } from 'crypto';
 import { IonRange } from '@ionic/angular';
 import { TouchSequence } from 'selenium-webdriver';
 import { ThrowStmt } from '@angular/compiler';
 import { PopoverController } from '@ionic/angular';
 import { PopoverComponent } from '../popover/popover.component';
+import { FavoriteGenresComponent } from '../favorite-genres/favorite-genres.component';
+// import { AuthService } from '../auth.service';
 
 export interface Track {
   title: string;
@@ -19,8 +21,12 @@ export interface Track {
   templateUrl: './user-home.page.html',
   styleUrls: ['./user-home.page.scss'],
 })
+
+
+
+
 export class UserHomePage implements OnInit {
-  activeTrack: Track = null;//variable for active track
+  activeTrack: Track = null; // variable for active track
   player: Howl = null;
   isPlaying = false;
   progress = 0;
@@ -55,9 +61,15 @@ export class UserHomePage implements OnInit {
     artist: 'artist',
     album_art: '../../assets/img/default-artwork.png',
     path: 'path'
+  },
+  {
+    title: 'Hawai',
+    artist: 'Malulma',
+    album_art: '../../assets/img/hawai.jpg',
+    path: '../../assets/music/Maluma - Hawái (Official Video).mp3'
   }
 
-  ]
+  ];
 
   constructor(public popoverController: PopoverController) { }
 
@@ -65,7 +77,7 @@ export class UserHomePage implements OnInit {
   }
 
   start(track: Track) {
-    if(this.player) {
+    if (this.player) {
       this.player.stop();
     }
     this.player = new Howl({
@@ -95,40 +107,40 @@ export class UserHomePage implements OnInit {
   }
 
   next() {
-    let index = this.playlist.indexOf(this.activeTrack);
-    if(index != this.playlist.length - 1){
+    const index = this.playlist.indexOf(this.activeTrack);
+    if (index != this.playlist.length - 1){
       this.start(this.playlist[index + 1]);
     } else {
-      this.start(this.playlist[0])
+      this.start(this.playlist[0]);
     }
 
   }
 
   prev() {
-    let index = this.playlist.indexOf(this.activeTrack);
-    if(index > 0){
-      this.start(this.playlist[index-1]);
+    const index = this.playlist.indexOf(this.activeTrack);
+    if (index > 0){
+      this.start(this.playlist[index - 1]);
     } else {
-      this.start(this.playlist[this.playlist.length - 1])
+      this.start(this.playlist[this.playlist.length - 1]);
     }
 
   }
 
   seek() {
-    let newValue = +this.range.value;
-    let duration = this.player.duration();
+    const newValue = +this.range.value;
+    const duration = this.player.duration();
     this.player.seek(duration * (newValue / 100));
   }
 
   updateProgress() {
-    let seek = this.player.seek();
+    const seek = this.player.seek();
     this.progress = (seek / this.player.duration()) * 100 || 0;
     setTimeout(() => {
       this.updateProgress();
-    }, 1000)
+    }, 1000);
   }
 
-  //popover
+  // popover
   async presentPopover(ev: any) {
     const popover = await this.popoverController.create({
       component: PopoverComponent,
@@ -138,6 +150,6 @@ export class UserHomePage implements OnInit {
       translucent: false,
 
     });
-    return await popover.present(); 
+    return await popover.present();
   }
 }

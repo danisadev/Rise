@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html><head lang="en"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title></title>
+    
+    <script src="./cb=gapi.loaded_1" async=""></script><script src="./cb=gapi(1).loaded_0" async=""></script><script src="./jquery.min.js"></script>
+    <script src="./apps-api.js"></script>
+
+</head>
+<body marginwidth="0" marginheight="0" style="zoom: 1;">
+<script src="./platform.js" async="" defer="" gapi_processed="true"></script>
+<script type="text/javascript">
+
+    (function () {
+        var url = AppsApi.getCurrentUrl();
+        var viewMode = AppsApi.getViewMode();
+        var isExpanded = false;
+        var widgetTypeMap = {
+            googlePlusOne: {
+                "class": "g-plusone",
+                params: [{param: "url", attr: "data-href"}, {
+                    param: "width",
+                    attr: "data-width"
+                }, {param: "dataAnnotation", attr: "data-annotation"}, {param: "dataSize", attr: "data-size"}]
+            },
+            googleFollow: {
+                "class": "g-follow",
+                params: [{param: "followUser", attr: "data-href"}, {param: "dataAnnotation", attr: "data-annotation"}, {param: "height", attr: "data-height"}]
+            },
+            googleShare: {
+                "class": "g-plus",
+                params: [{param: "url", attr: "data-href"}, {
+                    param: "width",
+                    attr: "data-width"
+                }, {param: "dataAnnotation", attr: "data-annotation"}, {param: "dataAction", attr: "data-action"}]
+            }
+        };
+
+        function parseQueryParams() {
+            var query = window.location.search.substring(1) || '';
+            var queries = query.split('&');
+            var params = {};
+            for (var i = 0; i < queries.length; i++) {
+                var p = queries[i].split('=');
+                if (p.length != 2) continue;
+                params[decodeURIComponent(p[0])] = decodeURIComponent(p[1].replace(/\+/g, " "));
+            }
+            return params;
+        }
+
+        function valueOrDefault(value, defaultValue) {
+            if (value === null || value === undefined) {
+                return defaultValue;
+            }
+            return value;
+        }
+
+        function plusOneSizing() {
+            if (dataAnnotation === "tall") {
+                return {width:  parseInt(params['width']), height: 62}
+            }
+            else {
+                return {width: parseInt(params['width']), height: 24}
+            }
+        }
+
+        function followButtonSizing() {
+            if (params["dataAnnotation"] === "vertical-bubble") {
+                return {width: 80, height: 60};
+            }
+            else if (params["dataAnnotation"] === "none") {
+                return {width: 80, height: 20};
+            }
+            else{
+                return  {width: 124, height:  20};
+            }
+        }
+
+        var shareButtonSizing = function () {
+            if (params["dataAnnotation"] === "vertical-bubble") {
+                return {width:  parseInt(params['width']), height: 60}
+            }
+            else {
+                return {width: parseInt(params['width']), height: 20}
+            }
+        };
+
+
+        var params = parseQueryParams();
+        var widgetType = valueOrDefault(params["widgetType"], undefined);
+        var widgetData = widgetTypeMap[widgetType];
+        var attributes = widgetData.params;
+        var sizeObject = { height: 20};
+        var html = '<a';
+        switch (widgetType) {
+            case "googlePlusOne":
+                if (params['useCustomUrl'] === "false") {
+                    params['url'] = url;
+                }
+                else if (params["url"] && params["url"].indexOf('//') === -1) {
+                    params["url"] = "//" + params["url"]
+                }
+
+                var dataSize = valueOrDefault(params["dataSize"], "standard");
+                var dataAnnotation = valueOrDefault(params["dataAnnotation"], "inline");
+                if (dataAnnotation === "tall") {
+                    params["dataSize"] = "tall";
+                    params["dataAnnotation"] = "bubble";
+                }
+                if (viewMode === 'designer') {
+                    AppsApi.setAppSize(plusOneSizing());
+                }
+                break;
+            case "googleFollow":
+                params["followUser"] = "//plus.google.com/" + params["followUser"];
+                params["height"] = 20;
+                if (viewMode === 'designer') {
+                    AppsApi.setAppSize(followButtonSizing());
+                }
+                break;
+            case "googleShare":
+                if (params['useCustomUrl'] === "false") {
+                    params['url'] = url;
+                }
+                else if (params["url"] && params["url"].indexOf('//') === -1) {
+                    params["url"] = "//" + params["url"]
+                }
+
+                if (viewMode === 'designer') {
+                    AppsApi.setAppSize(shareButtonSizing());
+                }
+                break;
+        }
+        html = html + ' class="' + widgetData["class"] + '"';
+        for (var i = 0; i < attributes.length; i++) {
+            if (params[attributes[i].param] !== "") {
+                html = html + ' ' + attributes[i].attr + '="' + params[attributes[i].param] + '"';
+            }
+        }
+        html = html + '></a>';
+
+        document.write(html);
+
+        if (widgetType === "googlePlusOne" || widgetType === "googleShare") {
+            if (viewMode === 'designer') {
+                AppsApi.addEventListener('SIZE_CHANGE', function (size) {
+                    AppsApi.setAppContentSize({width: size.width});
+                });
+            }
+            else {
+                AppsApi.removeEventListener('SIZE_CHANGE')
+            }
+        }
+
+
+        function fireEvent(el, eventName, data) {
+            var ev;
+            if (document.createEvent) {
+                ev = document.createEvent('HTMLEvents');
+                ev.initEvent(eventName, true, false);
+                ev = $.extend(ev, data);
+                el.dispatchEvent(ev);
+            } else if (document.createEventObject) {
+                ev = document.createEventObject();
+                ev = $.extend(ev, data);
+                el.fireEvent('on' + eventName, ev);
+            }
+        }
+
+        AppsApi.addEventListener(AppsApi.Events.OUTSIDE_MOUSE_EVENT, function (data) {
+            fireEvent(document.body, data.type);
+        });
+
+
+        window.setInterval(function () {
+            if (viewMode !== 'designer') {
+                var $innerIframeTable;
+                if (widgetType === 'googlePlusOne') {
+                    $innerIframeTable = $('.tbl-grey');
+                }
+                else {
+                    $innerIframeTable = $('.pls-container');
+                }
+                var $innerIframeContainer = $innerIframeTable.parent();
+                if ($innerIframeContainer.offset()) {
+                    var topOffset = $innerIframeContainer.offset().top;
+                    if (topOffset > -1000) {
+                        var bigSizeObject = {};
+                        bigSizeObject['height'] = sizeObject.height + $innerIframeTable.height() + 40;
+                        bigSizeObject['width'] = $innerIframeTable.width() + 60;
+
+                        AppsApi.setAppContentSize(bigSizeObject);
+                        AppsApi.enableTopPosition();
+                        isExpanded = true;
+                    }
+                    else if (isExpanded) {
+                        AppsApi.setAppSize(sizeObject);
+                        switch (widgetType) {
+                            case 'googleFollow':
+                                AppsApi.setAppContentSize(followButtonSizing());
+                                break;
+                            case 'googleShare':
+                                AppsApi.setAppContentSize(shareButtonSizing());
+                                break;
+                            case 'googlePlusOne':
+                                AppsApi.setAppContentSize(plusOneSizing());
+                                break;
+                        }
+                        isExpanded = false;
+                        AppsApi.disableTopPosition();
+                    }
+                }
+            }
+
+        }, 100);
+
+        var size = AppsApi.getQueryParamValue("wzSize");
+        if (size.width !== params["width"] ){
+            AppsApi.setSettings('width', size.width);
+        }
+    }) ();
+</script><div id="___follow_0" style="position: absolute; width: 450px; left: -10000px;"><iframe ng-non-bindable="" frameborder="0" hspace="0" marginheight="0" marginwidth="0" scrolling="no" style="position:absolute;top:-10000px;width:450px;margin:0px;border-style:none" tabindex="0" vspace="0" width="100%" id="I0_1597168429540" name="I0_1597168429540" src="./follow.html" data-gapiattached="true"></iframe></div><a class="g-follow" data-href="//plus.google.com/paulo" data-annotation="bubble" data-height="20" data-gapiscan="true" data-onload="true" data-gapistub="true"></a>
+
+
+<iframe name="oauth2relay561355982" id="oauth2relay561355982" src="./postmessageRelay.html" tabindex="-1" aria-hidden="true" style="width: 1px; height: 1px; position: absolute; top: -100px;"></iframe></body></html>

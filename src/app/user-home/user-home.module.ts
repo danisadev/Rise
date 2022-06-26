@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { UserHomePageRoutingModule } from './user-home-routing.module';
 
 import { UserHomePage } from './user-home.page';
+// import { FavoriteGenresComponent } from '../favorite-genres';
 
 @NgModule({
   imports: [

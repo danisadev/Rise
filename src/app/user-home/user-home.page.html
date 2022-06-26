@@ -1,35 +1,78 @@
 <ion-header>
+  <!-- ion-toolbar -->
   <ion-toolbar>
     <ion-item lines="none">
       <ion-title>RISE</ion-title>
+      <ion-item class="upload">
+        <ion-label>Upload</ion-label>
+      </ion-item>
       <ion-avatar (click)="presentPopover()">
-        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+        <img src="../../assets/img/pexels-ralph-rabago-3214734.jpg">
       </ion-avatar>
-
     </ion-item>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <div class="whats_new">
+    <ion-text>
+      <h5>What's New Today</h5>
+    </ion-text>
+  </div>
+  <ion-row>
+    <ion-col *ngFor="let track of playlist" col-4>
+      <!-- <ion-item  lines="none" (click)="start(track)"> -->
+      <ion-card (click)="start(track)">
+        <img src={{track.album_art}}>
+        <ion-card-header>
+          <ion-card-subtitle>{{track.artist}}</ion-card-subtitle>
+          <ion-card-title>{{track.title}}</ion-card-title>
+        </ion-card-header>
+      </ion-card>
 
-      <ion-row>
-          <ion-col *ngFor="let track of playlist" col-4>
-    <!-- <ion-item  lines="none" (click)="start(track)"> -->
-      
-          <ion-card (click)="start(track)">
-            <img src={{track.album_art}}>
-            <ion-card-header>
-              <ion-card-subtitle>{{track.artist}}</ion-card-subtitle>
-              <ion-card-title>{{track.title}}</ion-card-title>
-            </ion-card-header>
-          </ion-card>
-       
-    <!-- </ion-item> -->
-  </ion-col>
-</ion-row>
-  
+      <!-- </ion-item> featured artist-->
+    </ion-col>
+  </ion-row>
+  <div class="feat_artist">
+    <ion-text>
+      <h5>Featured Artists</h5>
+    </ion-text>
+    <ion-item>
+      <ion-col>
+        <ion-row>
+          <ion-item>
+          <ion-avatar>
+            <img src="../../assets/img/pexels-ralph-rabago-3214734.jpg">
+          </ion-avatar>
+        </ion-item>
+        <ion-item>
+          <ion-avatar>
+            <img src="../../assets/img/pexels-ralph-rabago-3214734.jpg">
+          </ion-avatar>
+        </ion-item>
+        <ion-item>
+          <ion-avatar>
+            <img src="../../assets/img/pexels-ralph-rabago-3214734.jpg">
+          </ion-avatar>
+        </ion-item>
+        <ion-item>
+          <ion-avatar>
+            <img src="../../assets/img/pexels-ralph-rabago-3214734.jpg">
+          </ion-avatar>
+        </ion-item>
+        </ion-row>
+      </ion-col>
+    </ion-item>
+  </div>
+  <!-- <ion-fab slot="fixed">
+    <ion-fab-button>Upload</ion-fab-button>
+  </ion-fab> -->
 </ion-content>
 
+<app-favorite-genres></app-favorite-genres>
+
+
+<!-- Playback controls, only present if active track playing -->
 <ion-footer class="playback" *ngIf="activeTrack">
   <ion-toolbar>
     <ion-row>
@@ -63,6 +106,5 @@
         </ion-item>
       </ion-col>
     </ion-row>
-
   </ion-toolbar>
 </ion-footer>

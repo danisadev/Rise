@@ -13,5 +13,17 @@ img {
 }
 
 ion-split-pane {
-  --side-width: 100%;
+  --side-max-width: 50%;
+}
+
+// #main {
+//   width: 40%;
+// }
+
+// #controls {
+//   width: 60%;
+// }
+
+.song_label {
+  padding: 30px 30px 30px 30px;
 }

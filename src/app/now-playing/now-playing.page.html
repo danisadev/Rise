@@ -1,11 +1,11 @@
 <ion-split-pane contentId="main">
-  <ion-menu contentId="main">
+  <ion-menu>
     <img src="../../assets/img/Famouz.jpg">
   </ion-menu>
   <!-- <ion-content>
     <ion-label></ion-label>
   </ion-content> -->
-  <ion-content>
+  <ion-content contentId="controls">
     <ion-label>
 
       Song Name
@@ -17,7 +17,7 @@
             <ion-item lines="none">
               <ion-icon name="play-back"></ion-icon>
             </ion-item>
-            <ion-item lines="none">
+            <ion-item lines="none" (click="audioPlayback.play()")>
               <ion-icon name="play"></ion-icon>
             </ion-item>
             <ion-item lines="none">

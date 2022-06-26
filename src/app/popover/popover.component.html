@@ -14,10 +14,9 @@
       <ion-label>Messages</ion-label>
       <ion-icon name="chatbubbles-outline"></ion-icon>
     </ion-item>
-    <ion-item>
+    <ion-item (click)="auth.logout()">
         <ion-label>Sign Out</ion-label>
         <ion-icon name="exit-outline"></ion-icon>
-        
     </ion-item>
   </ion-list>
 </ion-content>

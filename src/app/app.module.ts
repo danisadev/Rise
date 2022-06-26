@@ -11,7 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
-import { AuthenticationService } from './shared/authentication.service';
+// import { AuthenticationService } from './services/authentication.service';
 import { FormsModule } from '@angular/forms';
 // import { PopovercomponentPageModule } from './popover/popover.component'
 
@@ -19,12 +19,11 @@ import { FormsModule } from '@angular/forms';
   declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, AngularFireAuthModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig),FormsModule],
+    AngularFireModule.initializeApp(environment.firebaseConfig), FormsModule],
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    AuthenticationService
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
   ],
   bootstrap: [AppComponent],
 })

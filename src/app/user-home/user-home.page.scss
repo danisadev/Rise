@@ -21,15 +21,47 @@ ion-card {
   flex-direction: column;
   width: 100%;
 }
- .logo {
-     width: 50%;
- }
+.logo {
+  width: 50%;
+}
 
- .toolbarAlbumArt {
-     width: 10%;
-     height: auto;
- }
+.toolbarAlbumArt {
+  width: 10%;
+  height: auto;
+}
 
- .albumArtItem {
-     padding: 0;
- }
+.albumArtItem {
+  padding: 0;
+}
+
+.whats_new {
+  padding: 30px;
+}
+
+ion-fab {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.feat_artist {
+  padding: 20px;
+}
+
+.av_row {
+  flex-wrap: wrap;
+}
+
+.feat_artist > ion-text {
+  padding: 30px;
+}
+
+ion-col {
+  padding: 10px;
+}
+
+// ion-avatar {
+//   padding: 0 20px 0 20px;
+//   width: 10%;
+//   height: 10%;
+// }
